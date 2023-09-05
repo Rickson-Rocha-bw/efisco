@@ -1,3 +1,5 @@
 
 class EfiscoBase:
-    pass
+    
+    def abrir_sistema_efisco(self):
+        pass
