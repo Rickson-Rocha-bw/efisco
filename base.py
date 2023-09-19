@@ -12,9 +12,9 @@ import logging
 from threading import Thread
 from images.images import IMAGES
 from utilities.pag import *
-import json
-import requests
-from time import sleep
+#import json
+#import requests
+#from time import sleep
 
 import pandas as pd
 
