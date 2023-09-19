@@ -10,8 +10,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import logging
 from threading import Thread
-from images.images import IMAGES
-from utilities.pag import *
+#from images.images import IMAGES
+#from utilities.pag import *
 import json
 import requests
 from time import sleep
