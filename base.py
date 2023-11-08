@@ -20,14 +20,19 @@ import pandas as pd
 
 class EfiscoBase(BotSetup):
     
-     def abrir_sistema_efisco(self): 
+     def abrir_sistema_efisco(self) -> None: 
      
         self.driver.get("https://efisco.sefaz.pe.gov.br/sfi_com_sca/PRMontarMenuAcesso")
         logging.info("sistema efisco pronto para uso")
 
     
-     def login_efisco(self):
-        
+     def login_efisco(self) -> None:
+        try:
+            if WebDriverWait(self.driver, 5).until(EC.alert_is_present()):
+                alert = self.driver.switch_to.alert
+                alert.accept()
+        except TimeoutException:
+            logging.info("nenhuma janela de dialogo  detectada")
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(LOCATORS["BUTTON"]["ENTRAR_COM_GOV"]))
         self.driver.find_element(*LOCATORS["BUTTON"]["ENTRAR_COM_GOV"]).click()
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(LOCATORS["BUTTON"]["LOGIN_CERT_DIGITAl"]))
@@ -35,10 +40,15 @@ class EfiscoBase(BotSetup):
         self.__logar_com_certificado(certificado)
         self.driver.find_element(*LOCATORS["BUTTON"]["LOGIN_CERT_DIGITAl"]).click()
         try:
+            if WebDriverWait(self.driver, 5).until(EC.alert_is_present()):
+                alert = self.driver.switch_to.alert
+                alert.accept()
+        except TimeoutException:
+            logging.info("nenhuma janela de dialogo detectada")
+        try:
             pagina = self.driver.page_source
-            while "Pedro"  not in pagina:
+            while "Pedro" not in pagina:
                 self.driver.find_element(*LOCATORS["BUTTON"]["CLIQUE_PARA_PROSSEGUIR"]).click()
-                #self.__logar_com_certificado(certificado)
                 self.driver.find_element(*LOCATORS["BUTTON"]["ENTRAR_COM_GOV"]).click()
                 self.__logar_com_certificado(certificado)
                 self.driver.find_element(*LOCATORS["BUTTON"]["LOGIN_CERT_DIGITAl"]).click()
@@ -48,7 +58,7 @@ class EfiscoBase(BotSetup):
         logging.info("login com certificado realizado com sucesso")
         
     
-     def __selecionar_certificado(self):
+     def __selecionar_certificado(self) -> None:
         if exists(IMAGES["PAINEL"]["CERTIFICADO"]):
             double_click(IMAGES["PAINEL"]["CERTIFICADO"])
     
