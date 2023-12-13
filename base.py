@@ -10,8 +10,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import logging
 from threading import Thread
-from images.images import IMAGES
+from efisco.images.images import IMAGES
 from utilities.pag import *
+from settings import CPF_LUCI
+
 #import json
 #import requests
 #from time import sleep
@@ -72,4 +74,8 @@ class EfiscoBase(BotSetup):
         if block_execution:
             certificate_selector.join()
     
-    
+     def logar_pelo_cnpj(self):
+        self.driver.find_element(*LOCATORS["INPUT"]["CAMPO_USUARIO"]).send_keys(CPF_LUCI)  
+        self.driver.find_element(*LOCATORS["BUTTON"]["ENTRAR_OK"]).click()  
+        certificado = (IMAGES["PAINEL"]["CERTIFICADO_LUCI"])
+        self.__logar_com_certificado(certificado)
