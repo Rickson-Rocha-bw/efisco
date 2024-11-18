@@ -12,23 +12,27 @@ import logging
 from threading import Thread
 from efisco.images.images import IMAGES
 from utilities.pag import *
-from settings import CPF_LUCI
-
+from settings import CPF_PEDRO
 #import json
 #import requests
 #from time import sleep
+from selenium.webdriver.common.action_chains import ActionChains
 
 import pandas as pd
 
 class EfiscoBase(BotSetup):
     
-     def abrir_sistema_efisco(self) -> None: 
+    def abrir_sistema_efisco(self) -> None: 
      
         self.driver.get("https://efisco.sefaz.pe.gov.br/sfi_com_sca/PRMontarMenuAcesso")
+        try:
+            WebDriverWait(self.driver, 15).until(EC.alert_is_present()).accept()
+        except TimeoutException:
+            pass
         logging.info("sistema efisco pronto para uso")
 
     
-     def login_efisco(self) -> None:
+    def login_efisco(self) -> None:
         try:
             if WebDriverWait(self.driver, 5).until(EC.alert_is_present()):
                 alert = self.driver.switch_to.alert
@@ -60,13 +64,13 @@ class EfiscoBase(BotSetup):
         logging.info("login com certificado realizado com sucesso")
         
     
-     def __selecionar_certificado(self) -> None:
-        if exists(IMAGES["PAINEL"]["CERTIFICADO"]):
-            double_click(IMAGES["PAINEL"]["CERTIFICADO"])
+    def __selecionar_certificado(self) -> None:
+        logar_com_certificado = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(LOCATORS["INPUT"]["CAMPO_USUARIO"]))
+        ActionChains(self.driver).click(logar_com_certificado).perform()
+
     
-     def __logar_com_certificado(
+    def __logar_com_certificado(
         self,
-        base,
         block_execution=False,
     ):
         certificate_selector = Thread(target=self.__selecionar_certificado, args=[])
@@ -74,8 +78,13 @@ class EfiscoBase(BotSetup):
         if block_execution:
             certificate_selector.join()
     
-     def logar_pelo_cnpj(self):
-        self.driver.find_element(*LOCATORS["INPUT"]["CAMPO_USUARIO"]).send_keys(CPF_LUCI)  
-        self.driver.find_element(*LOCATORS["BUTTON"]["ENTRAR_OK"]).click()  
-        certificado = (IMAGES["PAINEL"]["CERTIFICADO_LUCI"])
-        self.__logar_com_certificado(certificado)
+    def logar_pelo_cpf(self): 
+
+        self.__logar_com_certificado()
+        if exists(IMAGES["PAINEL"]["CERTIFICADO"], 20):
+            double_click(IMAGES["PAINEL"]["CERTIFICADO"])
+        try:
+            WebDriverWait(self.driver, 15).until(EC.alert_is_present()).accept()
+        except TimeoutException:
+            pass
+         

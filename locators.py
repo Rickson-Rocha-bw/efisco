@@ -8,7 +8,8 @@ LOCATORS  = {
         "LOCALIZAR": (By.CSS_SELECTOR,"#btt_localizar"),
         "CAIXA_DE_ENTRADA":(By.CSS_SELECTOR,"#bt_consultar_caixas_mensagens"),
         "CLIQUE_PARA_PROSSEGUIR": (By.CSS_SELECTOR,"#btt_prosseguir"),
-        "HOME":(By.CSS_SELECTOR,"#a_botao_home")
+        "HOME":(By.CSS_SELECTOR,"#a_botao_home"),
+        "ENTRAR_OK": (By.ID, 'btt_ok'),
     },
     "PAINEL":{
     
@@ -19,7 +20,8 @@ LOCATORS  = {
     "INPUT":{
       "BUSCA_EXTERNO": (By.CSS_SELECTOR,"#input_busca_geral"), 
       "BUSCA_INTERNO": (By.CSS_SELECTOR,"#input_busca_geral_interno"),
-      "CNPJ_FORMULARIO": (By.CSS_SELECTOR,"#nuRadicalCNPJ")
+      "CNPJ_FORMULARIO": (By.CSS_SELECTOR,"#nuRadicalCNPJ"),
+      "CAMPO_USUARIO": (By.ID, 'btt_certificado')
     },
     "SELECT":{
     },
